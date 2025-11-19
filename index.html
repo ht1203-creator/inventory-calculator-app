@@ -330,10 +330,10 @@
                 targetPostDeliveryMonths = 3.5;
             } else if (totalLtDays < 12) {
                 // Total LT น้อยกว่า 12 วัน
-                targetPostDeliveryMonths = 2.5; 
+                targetPostDeliveryMonths = 2.0; 
             } else { // totalLtDays > 65
                 // Total LT มากกว่า 65 วัน ใช้เป้าหมายสูงสุดที่กำหนด
-                targetPostDeliveryMonths = 4.0; 
+                targetPostDeliveryMonths = 3.0; 
             }
             
             // 6. คำนวณ วันสั่งซื้อที่แนะนำ (T/Th ถัดไปเสมอ)
@@ -414,4 +414,5 @@
     </script>
 </body>
 </html>
+
 

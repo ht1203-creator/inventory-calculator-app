@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supply Chain Sentinel</title>
+    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom Font */
@@ -75,27 +76,33 @@
 </head>
 <body>
 
-    <div class="max-w-xl mx-auto mt-10 bg-gray-900 text-white p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700"> 
+    <!-- INVENTORY CALCULATION SECTION -->
+    <div class="max-w-4xl mx-auto mt-10 bg-gray-900 text-white p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700 w-full"> 
         <h2 class="text-2xl font-bold mb-6 border-b border-gray-700 pb-2 text-center">
             เครื่องมือคำนวณจุดสั่งซื้อสินค้าคงคลัง
         </h2>
         
         <div class="grid grid-cols-1 gap-6">
+            <!-- Inputs -->
             <div>
                 <label for="soh" class="block text-sm font-medium text-gray-300">Stock On Hand (SOH - จำนวนสินค้าคงคลัง)</label>
-                <input type="number" id="soh" value="100" class="mt-1 block w-full p-3 dark-input rounded-lg" placeholder="หน่วย">
+                <!-- REMOVED value="100" and updated placeholder -->
+                <input type="number" id="soh" class="mt-1 block w-full p-3 dark-input rounded-lg" placeholder="ตัวอย่าง: 100 หน่วย">
             </div>
             <div>
                 <label for="usage" class="block text-sm font-medium text-gray-300">Usage per Month (ปริมาณการใช้ต่อเดือน)</label>
-                <input type="number" id="usage" value="75" class="mt-1 block w-full p-3 dark-input rounded-lg" placeholder="หน่วย/เดือน">
+                <!-- REMOVED value="75" and updated placeholder -->
+                <input type="number" id="usage" class="mt-1 block w-full p-3 dark-input rounded-lg" placeholder="ตัวอย่าง: 75 หน่วย/เดือน">
             </div>
             <div>
                 <label for="lt" class="block text-sm font-medium text-gray-300">Lead Time (LT - ระยะเวลารอสินค้าปกติ, วัน)</label>
-                <input type="number" id="lt" value="12" class="mt-1 block w-full p-3 dark-input rounded-lg" placeholder="วัน">
+                <!-- REMOVED value="12" and updated placeholder -->
+                <input type="number" id="lt" class="mt-1 block w-full p-3 dark-input rounded-lg" placeholder="ตัวอย่าง: 12 วันทำการ">
             </div>
             <div>
                 <label for="bufferLt" class="block text-sm font-medium text-gray-300">Buffer LT (เผื่อการจัดส่ง/อนุมัติช้า, วัน) (ไม่บังคับ)</label>
-                <input type="number" id="bufferLt" value="5" class="mt-1 block w-full p-3 dark-input rounded-lg" placeholder="วัน">
+                <!-- REMOVED value="5" and updated placeholder -->
+                <input type="number" id="bufferLt" class="mt-1 block w-full p-3 dark-input rounded-lg" placeholder="ตัวอย่าง: 5 วัน (ถ้ามี)">
             </div>
         </div>
 
@@ -103,9 +110,11 @@
             คำนวณจุดสั่งซื้อ
         </button>
 
+        <!-- Results Display -->
         <div id="results" class="mt-8 p-6 bg-gray-800 rounded-xl border border-gray-700 hidden">
             <h3 class="text-xl font-bold text-white mb-4">ผลการคำนวณ:</h3>
             
+            <!-- Main Grid Results -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="p-3 bg-gray-900 rounded-lg border-l-4 border-red-500">
                     <p class="text-xs text-gray-400">Total Month ปัจจุบัน</p>
@@ -125,24 +134,30 @@
                 </div>
             </div>
             
+            <!-- Combined Total Month After Delivery and Button -->
             <div class="mt-4 p-4 bg-gray-900 rounded-lg border-l-4 border-green-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <!-- Text Display (Total Month After Delivery) -->
                 <div>
                     <p class="text-sm text-gray-400">Total Month หลังส่งสินค้า (เป้าหมาย <span id="targetMonthDisplay" class="font-bold"></span> เดือน)</p>
                     <p class="text-3xl font-extrabold text-green-400" id="postDeliveryMonth"></p>
                 </div>
+                <!-- Button -->
                 <button id="toggleDetailsBtn" onclick="toggleDetails()" class="mt-1 px-5 py-2 bg-gray-600 hover:bg-gray-700 text-white text-base font-semibold rounded-lg transition-colors flex-shrink-0 w-full sm:w-auto hidden">
                     รายละเอียดเพิ่มเติม
                 </button>
             </div>
             
+            <!-- Details Container (hidden by default) -->
             <div id="detailMessageContainer" class="text-sm text-gray-300 bg-gray-900 rounded-lg hidden">
                 <p id="detailMessage"></p>
             </div>
 
+            <!-- Error/Warning Message Box -->
             <div id="errorMessage" class="warning-box text-sm hidden"></div>
         </div>
     </div>
 
+    <!-- FOOTER SECTION -->
     <footer id="app-footer">
         Create by Hongte
     </footer>
@@ -280,7 +295,7 @@
 
             // 1. ตรวจสอบความถูกต้องของข้อมูล
             if (isNaN(soh) || isNaN(usage) || isNaN(lt) || usage <= 0 || soh < 0 || lt < 0) {
-                errorMessage.innerHTML = "Error: กรุณาป้อนข้อมูล **SOH, Usage, และ LT** ให้ครบถ้วนและถูกต้อง (Usage ต้องมากกว่า 0 และค่าทั้งหมดต้องไม่ติดลบ)";
+                errorMessage.innerHTML = "Error: กรุณาป้อนข้อมูล SOH, Usage, และ LT ให้ครบถ้วนและถูกต้อง (Usage ต้องมากกว่า 0 และค่าทั้งหมดต้องไม่ติดลบ)";
                 errorMessage.classList.remove('hidden');
                 resultsDiv.classList.add('hidden');
                 document.getElementById('toggleDetailsBtn').classList.add('hidden');
@@ -293,7 +308,7 @@
             } else {
                 const parsedBufferLt = parseInt(bufferLtInput);
                 if (isNaN(parsedBufferLt) || parsedBufferLt < 0) {
-                    errorMessage.innerHTML = "Error: ค่า **Buffer LT** ที่ป้อนต้องเป็นตัวเลขจำนวนเต็มบวก หรือเว้นว่างไว้";
+                    errorMessage.innerHTML = "Error: ค่า Buffer LT ที่ป้อนต้องเป็นตัวเลขจำนวนเต็มบวก หรือเว้นว่างไว้";
                     errorMessage.classList.remove('hidden');
                     resultsDiv.classList.add('hidden');
                     document.getElementById('toggleDetailsBtn').classList.add('hidden');
@@ -313,7 +328,7 @@
             // 4. คำนวณ Total Lead Time
             const totalLtDays = lt + bufferLt;
             
-            // 5. **กำหนดเป้าหมาย Total Month หลังส่งสินค้าตามเงื่อนไข LT**
+            // 5. กำหนดเป้าหมาย Total Month หลังส่งสินค้าตามเงื่อนไข LT
             let targetPostDeliveryMonths;
 
             if (totalLtDays >= 12 && totalLtDays <= 15) {
@@ -378,22 +393,51 @@
             const initialDeliveryDateForDisplay = addDays(finalOrderDate, totalLtDays);
             const initialDeliveryDateStringThai = initialDeliveryDateForDisplay.toLocaleDateString('th-TH', thaiOptions);
 
+            // --- IMPROVED DETAIL MESSAGE STRUCTURE ---
+            let detailMessage = ``;
+            
+            // Summary of Inputs
+            detailMessage += `<b><u>สรุปข้อมูลนำเข้าสำหรับการคำนวณ</u></b><br>`;
+            detailMessage += `- สินค้าคงคลัง (SOH): ${soh.toFixed(2)} หน่วย<br>`;
+            detailMessage += `- ปริมาณการใช้ (Usage): ${usage.toFixed(2)} หน่วย/เดือน<br>`;
+            detailMessage += `- Lead Time รวม (LT+Buffer): ${lt} + ${bufferLt} = <b>${totalLtDays} วัน</b><br>`;
+            detailMessage += `- เป้าหมาย Total Month หลังรับสินค้า: <b>${targetPostDeliveryMonths.toFixed(1)} เดือน</b> (กำหนดตาม Total LT ${totalLtDays} วัน)<br>`;
+            detailMessage += `<hr class="border-gray-700 my-2">`;
 
-            let detailMessage = `**วันสั่งซื้อที่แนะนำ (T/Th ถัดไป):** ${orderDateStringThai} (${orderDayName})<br>`;
-            detailMessage += `**Total Lead Time (LT + Buffer LT):** ${lt} + ${bufferLt} = ${totalLtDays} วัน<br>`;
+
+            // Step 1: Timeline and Consumption
+            detailMessage += `<b><u>ขั้นตอนที่ 1: การคาดการณ์สินค้าคงคลัง ณ วันรับสินค้า</u></b><br>`;
+            detailMessage += `- วันสั่งซื้อแนะนำ (T/Th ถัดไป): ${orderDateStringThai} (${orderDayName})<br>`;
+            detailMessage += `- จำนวนวันรอสินค้า (จากวันนี้ถึงวันรับของ): <b>${daysToDelivery} วัน</b><br>`;
             
-            // เพิ่มข้อความอธิบายการปรับวันส่งสินค้า
+            // Explanation for Delivery Date Adjustment
             if (initialDeliveryDateForDisplay.getDay() !== 1) { // 1 = Monday
-                detailMessage += `วันส่งสินค้าตาม Lead Time คือ ${initialDeliveryDateStringThai} แต่ถูกปรับให้เป็น **วันจันทร์** ถัดไป<br>`;
+                detailMessage += `- วันส่งสินค้าตาม Lead Time คือ ${initialDeliveryDateStringThai} แต่ถูกปรับให้เป็น วันจันทร์ ถัดไป เพื่อให้เป็นไปตามกระบวนการ<br>`;
+                detailMessage += `- วันรับสินค้าที่คาดหวัง: <b>${deliveryDateStringThai} (${deliveryDayName})</b><br>`;
+            } else {
+                detailMessage += `- วันรับสินค้าที่คาดหวัง: <b>${deliveryDateStringThai} (${deliveryDayName})</b> (ตรงตามวันจันทร์)<br>`;
             }
-            detailMessage += `**วันส่งสินค้าที่คาดหวัง (วันจันทร์):** ${deliveryDateStringThai} (${deliveryDayName})<br>`;
-            detailMessage += `**จำนวนวันที่รอสินค้า (นับจากวันนี้ถึงวันส่ง):** ${daysToDelivery} วัน<br>`;
-            detailMessage += `**สินค้าที่เหลือในวันส่ง (SOH-Consumption):** ${soh.toFixed(2)} - ${consumption.toFixed(2)} = **${sohAtDelivery.toFixed(2)} หน่วย**<br>`;
+
+            detailMessage += `- ปริมาณที่ใช้ไประหว่างรอ: (${usage.toFixed(2)} หน่วย/เดือน / ${DAYS_PER_MONTH.toFixed(2)} วัน) x ${daysToDelivery} วัน = ${consumption.toFixed(2)} หน่วย<br>`;
+            detailMessage += `- สินค้าคงเหลือ ณ วันรับสินค้า (SOH At Delivery): SOH (${soh.toFixed(2)}) - ใช้ไป (${consumption.toFixed(2)}) = <span class="text-yellow-400 font-bold">${sohAtDelivery.toFixed(2)} หน่วย</span><br>`;
+            detailMessage += `<hr class="border-gray-700 my-2">`;
+
+
+            // Step 2: Ordering Logic
+            detailMessage += `<b><u>ขั้นตอนที่ 2: การตัดสินใจสั่งซื้อ</u></b><br>`;
+            detailMessage += `- เป้าหมายสต็อกที่ต้องการ: ${targetPostDeliveryMonths.toFixed(1)} เดือน x ${usage.toFixed(2)} หน่วย/เดือน = <b>${targetStockUnits.toFixed(2)} หน่วย</b><br>`;
+            detailMessage += `- SOH ณ วันรับสินค้า: ${sohAtDelivery.toFixed(2)} หน่วย<br>`;
+
+            // Detailed conclusion based on Order Quantity
+            if (orderQty > 0) {
+                 detailMessage += `- วิเคราะห์: SOH ณ วันรับของ (${sohAtDelivery.toFixed(2)}) น้อยกว่า เป้าหมายสต็อก (${targetStockUnits.toFixed(2)})<br>`;
+                 detailMessage += `- ปริมาณที่ต้องสั่งซื้อ: เป้าหมาย (${targetStockUnits.toFixed(2)}) - SOH ณ วันรับของ (${sohAtDelivery.toFixed(2)}) = <b><span class="text-cyan-400 font-bold">${orderQty.toFixed(0)} หน่วย</span></b> (ปัดขึ้น)<br>`;
+            } else {
+                 detailMessage += `- วิเคราะห์: SOH ณ วันรับของ (${sohAtDelivery.toFixed(2)}) <b>เกินกว่า</b> เป้าหมายสต็อก (${targetStockUnits.toFixed(2)})<br>`;
+                 detailMessage += `- ผลลัพธ์: ปริมาณที่ต้องสั่งซื้อ = <b><span class="text-cyan-400 font-bold">0 หน่วย</span></b> (สต็อกปัจจุบันเพียงพอ)<br>`;
+            }
             
-            detailMessage += `<br>**หลักการคำนวณสั่งซื้อ:**<br>`;
-            detailMessage += `- **เป้าหมายสต็อก:** ${targetPostDeliveryMonths.toFixed(1)} เดือน x ${usage} หน่วย/เดือน = **${targetStockUnits.toFixed(2)} หน่วย**<br>`;
-            detailMessage += `- **ปริมาณที่ต้องสั่ง:** เป้าหมายสต็อก (${targetStockUnits.toFixed(2)}) - SOH ณ วันส่ง (${sohAtDelivery.toFixed(2)}) = **${orderQty.toFixed(0)} หน่วย** (ปัดขึ้น)<br>`;
-            detailMessage += `- **Total Month หลังส่ง:** (${sohAtDelivery.toFixed(2)} + ${orderQty.toFixed(0)}) / ${usage} = **${postDeliveryMonth.toFixed(2)} เดือน**`;
+            detailMessage += `- Total Month หลังส่งมอบ: (${sohAtDelivery.toFixed(2)} + ${orderQty.toFixed(0)}) / ${usage.toFixed(2)} = <b><span class="text-green-400 font-bold">${postDeliveryMonth.toFixed(2)} เดือน</span></b>`;
             
             // 13. แสดงผลรายละเอียดและจัดการปุ่ม/คำเตือน
             document.getElementById('detailMessage').innerHTML = detailMessage;
@@ -413,11 +457,10 @@
 
         }
 
-        // Run calculation with default values on load
+        // Run calculation on load. Since values are now empty, this will display the validation error message initially.
         window.onload = function() {
             calculateReorder();
         };
     </script>
 </body>
 </html>
-

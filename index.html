@@ -3,37 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lhao-Lhao Restaurant</title>
+    <title>จองโต๊ะกับ Lhao Lhao</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
-        body { font-family: 'Sarabun', sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { text-align: center; color: #333; }
-        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { background-color: #28a745; color: white; border: none; cursor: pointer; font-size: 16px; font-weight: bold; }
-        button:hover { background-color: #218838; }
-        .loading { display: none; text-align: center; color: #666; }
+        :root {
+            --primary-color: #A0522D; /* Sienna - Warm Brown */
+            --secondary-color: #F5DEB3; /* Wheat - Light Cream */
+            --text-dark: #333;
+            --text-light: #555;
+            --bg-light: #FDF5E6; /* Old Lace - Very light cream */
+            --border-color: #D2B48C; /* Tan - Muted Brown */
+            --success-color: #28a745;
+            --error-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--bg-light);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Adjust alignment for better mobile view */
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px; /* Add padding for mobile view */
+            box-sizing: border-box;
+            color: var(--text-dark);
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 450px; /* Slightly wider for better form layout */
+            box-sizing: border-box;
+            margin-top: 20px; /* Push down slightly from top on mobile */
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        h2 i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            position: relative; /* For icon positioning */
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 400;
+            color: var(--text-light);
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="time"],
+        select {
+            width: calc(100% - 24px); /* Account for padding */
+            padding: 12px 12px 12px 40px; /* Left padding for icon */
+            margin: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 1em;
+            color: var(--text-dark);
+            transition: border-color 0.3s ease;
+            background-color: var(--secondary-color); /* Light background for input */
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.2); /* Light primary glow */
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 60%; /* Adjust based on label + input height */
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            pointer-events: none; /* Make icon not interfere with input */
+        }
+
+        /* Adjust icon position for inputs with labels */
+        .form-group input + i, .form-group select + i {
+            top: calc(50% + 10px); /* 10px is roughly half of label height + padding */
+        }
+
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #8B4513; /* Darker Sienna */
+            transform: translateY(-2px);
+        }
+
+        .status-message {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 400;
+        }
+
+        .status-message.loading {
+            background-color: #e9ecef;
+            color: var(--text-light);
+        }
+        .status-message.success {
+            background-color: #d4edda;
+            color: var(--success-color);
+        }
+        .status-message.error {
+            background-color: #f8d7da;
+            color: var(--error-color);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+                align-items: flex-start;
+            }
+            .container {
+                padding: 25px;
+                margin-top: 15px;
+                border-radius: 10px;
+            }
+            h2 {
+                font-size: 1.6em;
+                margin-bottom: 25px;
+            }
+            input, select, button {
+                padding: 12px 12px 12px 40px;
+                font-size: 0.95em;
+            }
+            button {
+                padding: 14px;
+                font-size: 1em;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>🍽️ จองโต๊ะกับ Lhao Lhao</h2>
+    <h2><i class="fas fa-utensils"></i> Lhao Lhao</h2>
+    <p style="text-align: center; color: var(--text-light); margin-top: -15px; margin-bottom: 30px;">
+        จองโต๊ะเพื่อประสบการณ์อาหารเลิศรสในแบบฉบับไทย-จีน
+    </p>
+
     <form id="bookingForm">
-        <input type="text" name="Name" placeholder="ชื่อผู้จอง" required>
-        <input type="tel" name="Phone" placeholder="เบอร์โทรศัพท์" required>
-        <input type="date" name="Date" required>
-        <input type="time" name="Time" required>
-        <select name="Guests" required>
-            <option value="" disabled selected>จำนวนลูกค้า</option>
-            <option value="1">1 ท่าน</option>
-            <option value="2">2 ท่าน</option>
-            <option value="4">3-4 ท่าน</option>
-            <option value="6">5-6 ท่าน</option>
-            <option value="More">มากกว่า 6 ท่าน</option>
-        </select>
-        <button type="submit">ยืนยันการจอง</button>
+        <div class="form-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="Name" placeholder="ชื่อ-นามสกุล" required>
+        </div>
+        
+        <div class="form-group">
+            <i class="fas fa-phone"></i>
+            <input type="tel" name="Phone" placeholder="เบอร์โทรศัพท์ (เช่น 08XXXXXXXX)" required pattern="[0-9]{10}">
+        </div>
+        
+        <div class="form-group">
+            <i class="fas fa-calendar-alt"></i>
+            <input type="date" name="Date" required>
+        </div>
+        
+        <div class="form-group">
+            <i class="fas fa-clock"></i>
+            <input type="time" name="Time" required>
+        </div>
+        
+        <div class="form-group">
+            <i class="fas fa-users"></i>
+            <select name="Guests" required>
+                <option value="" disabled selected>จำนวนลูกค้า</option>
+                <option value="1">1 ท่าน</option>
+                <option value="2">2 ท่าน</option>
+                <option value="3-4">3-4 ท่าน</option>
+                <option value="5-6">5-6 ท่าน</option>
+                <option value="7-10">7-10 ท่าน</option>
+                <option value="More than 10">มากกว่า 10 ท่าน</option>
+            </select>
+        </div>
+        
+        <button type="submit">ยืนยันการจองโต๊ะ</button>
     </form>
-    <p id="statusMessage" class="loading">กำลังบันทึกข้อมูล...</p>
+
+    <div id="statusMessage" class="status-message"></div>
 </div>
 
 <script>
@@ -46,22 +238,33 @@
     form.addEventListener('submit', e => {
         e.preventDefault();
         statusMsg.style.display = 'block';
+        statusMsg.className = 'status-message loading';
+        statusMsg.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึกข้อมูล... โปรดรอสักครู่';
         
         fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => {
-                alert("✅ ขอบคุณครับ! จองโต๊ะสำเร็จแล้ว");
-                form.reset();
-                statusMsg.style.display = 'none';
+            .then(response => response.json()) // รับ response เป็น JSON
+            .then(data => {
+                if (data.result === 'success') {
+                    statusMsg.className = 'status-message success';
+                    statusMsg.innerHTML = '<i class="fas fa-check-circle"></i> ขอบคุณครับ! การจองโต๊ะสำเร็จเรียบร้อยแล้ว';
+                    form.reset();
+                } else {
+                    throw new Error(data.error || 'Unknown error');
+                }
             })
             .catch(error => {
                 console.error('Error!', error.message);
-                alert("❌ เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง");
-                statusMsg.style.display = 'none';
+                statusMsg.className = 'status-message error';
+                statusMsg.innerHTML = '<i class="fas fa-times-circle"></i> เกิดข้อผิดพลาดในการจอง โปรดลองใหม่อีกครั้ง หรือติดต่อร้านโดยตรง';
+            })
+            .finally(() => {
+                // ซ่อนข้อความสถานะหลังจาก 5 วินาที
+                setTimeout(() => {
+                    statusMsg.style.display = 'none';
+                }, 5000);
             });
     });
 </script>
 
 </body>
-
 </html>
-

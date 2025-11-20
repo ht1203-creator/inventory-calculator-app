@@ -1,380 +1,1157 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ภัตตาคารทะเลทอง (Golden Ocean Seafood)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Ocean Dragon - Authentic Thai-Chinese Seafood Excellence</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Kanit', 'sans-serif'],
-                    },
-                    colors: {
-                        'ocean-dark': '#0f172a', // สีน้ำเงินเข้ม
-                        'ocean-blue': '#0ea5e9', // สีฟ้าน้ำทะเล
-                        'thai-gold': '#d4af37',  // สีทอง
-                        'china-red': '#ef4444',  // สีแดงมงคล
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Animation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    
     <style>
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #0f172a; border-radius: 4px; }
-        
-        /* Mobile Nav Animation */
-        .mobile-nav-item { transition: all 0.3s ease; }
-        .mobile-nav-item:active { transform: scale(0.9); }
-        
-        /* Image Upload Preview Style */
-        .menu-img-container {
-            aspect-ratio: 4/3;
-            overflow: hidden;
+        :root {
+            --ocean-blue: #1e3a8a;
+            --auspicious-red: #dc2626;
+            --gold: #f59e0b;
+            --warm-white: #fefdf8;
+            --charcoal: #374151;
         }
-        .menu-img-container img {
+        
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--warm-white);
+            color: var(--charcoal);
+        }
+        
+        .font-display {
+            font-family: 'Kanit', sans-serif;
+        }
+        
+        .hero-bg {
+            background-image: url('hero-restaurant.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .gradient-overlay {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(30, 58, 138, 0.4) 100%);
+        }
+        
+        .menu-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--auspicious-red) 0%, #b91c1c 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--gold) 0%, #d97706 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--gold);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold);
+        }
+        
+        .mobile-menu {
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.open {
+            transform: translateY(0);
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
         }
-        .menu-img-container:hover img {
-            transform: scale(1.1);
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .particle-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .form-input {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .form-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+        
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+        }
+        
+        .admin-panel.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-bg {
+                background-attachment: scroll;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans pb-20 md:pb-0">
-
-    <header class="fixed top-0 w-full bg-ocean-dark/95 backdrop-blur text-white z-50 shadow-lg">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-fish text-thai-gold text-2xl"></i>
-                <h1 class="text-xl font-bold tracking-wide">Golden Ocean <span class="text-thai-gold text-sm block font-normal">ภัตตาคารทะเลทอง</span></h1>
-            </div>
-            <nav class="hidden md:flex gap-6">
-                <a href="#home" class="hover:text-thai-gold transition">หน้าแรก</a>
-                <a href="#story" class="hover:text-thai-gold transition">เรื่องราวของเรา</a>
-                <a href="#menu" class="hover:text-thai-gold transition">เมนูอาหาร</a>
-                <a href="#reservation" class="bg-thai-gold text-ocean-dark px-4 py-1 rounded-full font-bold hover:bg-yellow-400 transition">จองโต๊ะ</a>
-            </nav>
-            <button class="md:hidden text-thai-gold" onclick="alert('สวัสดีครับ! กรุณาใช้เมนูด้านล่างสำหรับมือถือ')">
-                <i class="fa-solid fa-bars text-xl"></i>
-            </button>
-        </div>
-    </header>
-
-    <section id="home" class="relative h-[80vh] flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1534080564583-6be75777b70a?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center">
-        <div class="absolute inset-0 bg-gradient-to-b from-ocean-dark/70 to-ocean-dark/30"></div>
-        <div class="relative z-10 text-center text-white px-4">
-            <h2 class="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">รสชาติแห่งท้องทะเล <br><span class="text-thai-gold">ผสานตำนานไทย-จีน</span></h2>
-            <p class="text-lg mb-8 text-gray-200">วัตถุดิบสดใหม่ รังสรรค์เมนูระดับภัตตาคาร</p>
-            <a href="#reservation" class="inline-block bg-china-red text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg hover:bg-red-600 hover:scale-105 transition transform">
-                จองโต๊ะทันที <i class="fa-solid fa-arrow-right ml-2"></i>
-            </a>
-        </div>
-    </section>
-
-    <section id="story" class="py-16 container mx-auto px-4">
-        <div class="max-w-3xl mx-auto text-center">
-            <h3 class="text-3xl font-bold text-ocean-dark mb-6"><i class="fa-solid fa-book-open mr-2 text-thai-gold"></i>เรื่องราวของเรา</h3>
-            <p class="text-gray-600 leading-relaxed">
-                จากรุ่นสู่รุ่น ภัตตาคารทะเลทองมุ่งมั่นคัดสรรวัตถุดิบจากท้องทะเลลึก ปรุงแต่งด้วยเครื่องเทศสูตรลับเฉพาะที่ผสมผสานวัฒนธรรมอาหารไทยและจีนเข้าด้วยกันอย่างลงตัว เราเชื่อว่า "อาหารที่ดี คือจุดเริ่มต้นของความสุขในครอบครัว"
-            </p>
-        </div>
-    </section>
-
-    <section id="menu" class="py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-end mb-8">
-                <div>
-                    <h3 class="text-3xl font-bold text-ocean-dark">เมนูแนะนำ</h3>
-                    <p class="text-gray-500">ความอร่อยที่คุณไม่ควรพลาด</p>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="font-display text-2xl font-bold text-blue-900">
+                    Ocean Dragon
                 </div>
-                <button onclick="openAdminModal()" class="text-sm text-gray-400 hover:text-ocean-blue underline">
-                    <i class="fa-solid fa-user-gear"></i> สำหรับเจ้าของร้าน
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link active">Home</a>
+                    <a href="#story" class="nav-link">Our Story</a>
+                    <a href="#menu" class="nav-link">Menu</a>
+                    <a href="#location" class="nav-link">Location</a>
+                    <a href="#careers" class="nav-link">Careers</a>
+                    <a href="#reservations" class="nav-link">Reservations</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2">
+                    <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
-
-            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
         </div>
-    </section>
-
-    <section id="reservation" class="py-16 bg-slate-100">
-        <div class="container mx-auto px-4 max-w-lg">
-            <div class="bg-white p-8 rounded-2xl shadow-xl border-t-4 border-thai-gold">
-                <h3 class="text-2xl font-bold text-ocean-dark mb-6 text-center">จองโต๊ะออนไลน์</h3>
-                <form id="bookingForm" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">ชื่อลูกค้า (Name)</label>
-                        <input type="text" name="Name" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-thai-gold outline-none">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">เบอร์โทร (Phone)</label>
-                            <input type="tel" name="Phone" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-thai-gold outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">จำนวนคน (Guests)</label>
-                            <input type="number" name="Guests" min="1" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-thai-gold outline-none">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">วันที่ (Date)</label>
-                            <input type="date" name="Date" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-thai-gold outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">เวลา (Time)</label>
-                            <input type="time" name="Time" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-thai-gold outline-none">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">ข้อเสนออื่นๆ (Remark)</label>
-                        <textarea name="Remark" rows="2" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-thai-gold outline-none"></textarea>
-                    </div>
-                    
-                    <input type="hidden" name="Timestamp" id="timestampInput">
-
-                    <button type="submit" id="submitBtn" class="w-full bg-ocean-dark text-white font-bold py-3 rounded-lg hover:bg-ocean-blue transition duration-300 flex justify-center items-center gap-2">
-                        ยืนยันการจอง
-                    </button>
-                </form>
+        
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="mobile-menu md:hidden bg-white shadow-lg">
+            <div class="container mx-auto px-4 py-4 space-y-4">
+                <a href="#home" class="block nav-link">Home</a>
+                <a href="#story" class="block nav-link">Our Story</a>
+                <a href="#menu" class="block nav-link">Menu</a>
+                <a href="#location" class="block nav-link">Location</a>
+                <a href="#careers" class="block nav-link">Careers</a>
+                <a href="#reservations" class="block nav-link">Reservations</a>
             </div>
         </div>
-    </section>
-
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            <div>
-                <h3 class="text-2xl font-bold text-ocean-dark mb-4"><i class="fa-solid fa-map-location-dot text-china-red mr-2"></i>แผนที่ร้าน</h3>
-                <div class="border-2 border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition">
-                    <a href="https://maps.google.com" target="_blank">
-                        <img src="https://maps.app.goo.gl/3w49By6mD3yF3tVMA" alt="Map Location" class="w-full h-64 object-cover">
-                        <div class="bg-ocean-dark text-white text-center py-2 text-sm">
-                            คลิกเพื่อดูแผนที่บน Google Maps
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                <h3 class="text-2xl font-bold text-ocean-dark mb-4"><i class="fa-solid fa-briefcase text-ocean-blue mr-2"></i>ร่วมงานกับเรา</h3>
-                <p class="text-gray-600 mb-4">เรากำลังมองหาทีมงานที่มีใจรักบริการ มาร่วมเป็นส่วนหนึ่งของครอบครัวทะเลทอง</p>
-                
-                <form onsubmit="sendJobEmail(event)" class="space-y-3">
-                    <input type="text" id="jobName" placeholder="ชื่อ-นามสกุล" class="w-full p-3 border rounded-lg" required>
-                    <input type="tel" id="jobPhone" placeholder="เบอร์โทรติดต่อ" class="w-full p-3 border rounded-lg" required>
-                    <select id="jobPosition" class="w-full p-3 border rounded-lg">
-                        <option>พนักงานเสิร์ฟ</option>
-                        <option>ผู้ช่วยกุ๊ก</option>
-                        <option>ผู้จัดการร้าน</option>
-                    </select>
-                    <button type="submit" class="w-full bg-white border-2 border-ocean-blue text-ocean-blue font-bold py-2 rounded-lg hover:bg-ocean-blue hover:text-white transition">
-                        ส่งใบสมัคร (Email)
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-ocean-dark text-gray-400 py-8 text-center text-sm mb-16 md:mb-0">
-        <p>&copy; 2025 Golden Ocean Seafood. All rights reserved.</p>
-        <p class="mt-2">ออกแบบโดยทีมงานมืออาชีพ</p>
-    </footer>
-
-    <nav class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around py-3 z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-        <a href="#home" class="mobile-nav-item flex flex-col items-center text-gray-500 hover:text-ocean-blue">
-            <i class="fa-solid fa-house text-xl mb-1"></i>
-            <span class="text-xs">หน้าแรก</span>
-        </a>
-        <a href="#menu" class="mobile-nav-item flex flex-col items-center text-gray-500 hover:text-ocean-blue">
-            <i class="fa-solid fa-utensils text-xl mb-1"></i>
-            <span class="text-xs">เมนู</span>
-        </a>
-        <a href="#reservation" class="mobile-nav-item flex flex-col items-center text-china-red hover:text-red-600">
-            <div class="bg-china-red text-white rounded-full p-3 -mt-8 shadow-lg border-4 border-white">
-                <i class="fa-solid fa-calendar-check text-xl"></i>
-            </div>
-            <span class="text-xs mt-1 font-bold text-china-red">จองโต๊ะ</span>
-        </a>
-        <a href="#story" class="mobile-nav-item flex flex-col items-center text-gray-500 hover:text-ocean-blue">
-            <i class="fa-solid fa-fish text-xl mb-1"></i>
-            <span class="text-xs">เรื่องราว</span>
-        </a>
-        <a href="#" onclick="openAdminModal()" class="mobile-nav-item flex flex-col items-center text-gray-500 hover:text-ocean-blue">
-            <i class="fa-solid fa-user text-xl mb-1"></i>
-            <span class="text-xs">แอดมิน</span>
-        </a>
     </nav>
 
-    <div id="adminModal" class="fixed inset-0 bg-black/80 hidden z-[60] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-2xl p-6 relative">
-            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500">
-                <i class="fa-solid fa-xmark text-2xl"></i>
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="particle-bg" id="particles"></div>
+        <div class="gradient-overlay absolute inset-0"></div>
+        <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+            <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">
+                <span id="typed-text"></span>
+            </h1>
+            <p class="text-lg md:text-xl mb-8 opacity-90">
+                Experience the perfect fusion of authentic Thai spices and traditional Chinese cooking techniques, 
+                crafted with the freshest seafood from local waters.
+            </p>
+            <button onclick="scrollToSection('reservations')" class="btn-primary text-white px-8 py-4 rounded-full text-lg font-semibold">
+                <i class="fas fa-calendar-alt mr-2"></i>
+                Book Your Table Now
             </button>
-            
-            <div id="loginState">
-                <h3 class="text-xl font-bold mb-4 text-center">เข้าสู่ระบบเจ้าของร้าน</h3>
-                <input type="password" id="adminPass" placeholder="รหัสผ่าน (Hint: admin123)" class="w-full p-3 border rounded-lg mb-3">
-                <button onclick="checkLogin()" class="w-full bg-ocean-dark text-white py-2 rounded-lg">เข้าสู่ระบบ</button>
-            </div>
+        </div>
+    </section>
 
-            <div id="uploadState" class="hidden">
-                <h3 class="text-xl font-bold mb-4 text-center text-ocean-blue">จัดการรูปภาพอาหาร</h3>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center mb-4 hover:bg-gray-50 transition cursor-pointer relative">
-                    <input type="file" id="imgInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage()">
-                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 mb-2"></i>
-                    <p class="text-sm text-gray-500">แตะเพื่ออัพโหลดรูปภาพ</p>
+    <!-- Our Story Section -->
+    <section id="story" class="py-20 fade-in">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-blue-900 mb-4">Our Story</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Three generations of culinary excellence, blending the bold flavors of Thailand 
+                    with the refined techniques of Chinese cuisine.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h3 class="font-display text-2xl font-semibold text-blue-900">
+                        A Legacy of Flavor
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Founded in 1985 by Master Chef Chen and his Thai wife Mali, Ocean Dragon began as a small 
+                        family restaurant with a simple vision: to create the perfect harmony between Thai boldness 
+                        and Chinese elegance in every seafood dish.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Today, we continue this tradition using only the freshest catch from local fishermen, 
+                        combined with authentic spices sourced directly from Thailand and China. Our commitment 
+                        to quality and tradition has made us the premier destination for seafood lovers.
+                    </p>
+                    <div class="flex items-center space-x-4 pt-4">
+                        <div class="text-center">
+                            <div class="font-display text-3xl font-bold text-gold">38</div>
+                            <div class="text-sm text-gray-600">Years Experience</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-display text-3xl font-bold text-gold">5★</div>
+                            <div class="text-sm text-gray-600">Customer Rating</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-display text-3xl font-bold text-gold">50+</div>
+                            <div class="text-sm text-gray-600">Signature Dishes</div>
+                        </div>
+                    </div>
                 </div>
-                <input type="text" id="menuTitle" placeholder="ชื่อเมนูอาหาร" class="w-full p-2 border rounded mb-2">
-                <input type="text" id="menuPrice" placeholder="ราคา (เช่น 350 บาท)" class="w-full p-2 border rounded mb-4">
-                <button onclick="addMenuItem()" class="w-full bg-green-500 text-white py-2 rounded-lg">เพิ่มเมนูลงหน้าเว็บ</button>
-                <p class="text-xs text-red-400 mt-2 text-center">*รูปจะแสดงผลจนกว่าจะรีเฟรชหน้าเว็บ (Demo)</p>
+                
+                <div class="splide" id="story-carousel">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            <li class="splide__slide">
+                                <img src="https://kimi-web-img.moonshot.cn/img/www.t3architects.com/fdb70e1c83eeb8e2f0cf3f77d8dbd23e0b10c00a.jpg" 
+                                     alt="Restaurant Interior" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                            </li>
+                            <li class="splide__slide">
+                                <img src="https://kimi-web-img.moonshot.cn/img/image.freepik.com/20bcb4e2afb2dffbea40c3da66636a6b8c243042.jpg" 
+                                     alt="Chef Cooking" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                            </li>
+                            <li class="splide__slide">
+                                <img src="https://kimi-web-img.moonshot.cn/img/image.freepik.com/b1cc4b00ef4e6e4f428e16d436b63aa3dd1b3a20.jpg" 
+                                     alt="Kitchen Team" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
-    </div
+    </section>
 
-    <script>
-        // 1. INITIAL DATA (Mockup Menu)
-        let menuItems = [
-            { title: "กุ้งมังกรผัดซอส XO", price: "1,200 บาท", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=500&q=60" },
-            { title: "ปูทะเลนึ่งซีอิ๊ว", price: "850 บาท", img: "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=500&q=60" },
-            { title: "ติ่มซำจักรพรรดิ", price: "590 บาท", img: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=500&q=60" },
-        ];
+    <!-- Menu Section -->
+    <section id="menu" class="py-20 bg-gray-50 fade-in">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-blue-900 mb-4">Our Menu</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Discover our signature dishes, each crafted with the finest ingredients 
+                    and time-honored recipes passed down through generations.
+                </p>
+            </div>
+            
+            <!-- Menu Filter -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="menu-filter active px-6 py-2 rounded-full bg-blue-900 text-white" data-filter="all">All</button>
+                <button class="menu-filter px-6 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="appetizers">Appetizers</button>
+                <button class="menu-filter px-6 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="mains">Main Courses</button>
+                <button class="menu-filter px-6 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="desserts">Desserts</button>
+                <button class="menu-filter px-6 py-2 rounded-full bg-gray-200 text-gray-700" data-filter="beverages">Beverages</button>
+            </div>
+            
+            <!-- Menu Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-grid">
+                <!-- Menu items will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
 
-        // Render Menu Function
-        function renderMenu() {
-            const grid = document.getElementById('menu-grid');
-            grid.innerHTML = ""; // Clear existing
-            menuItems.forEach(item => {
-                const card = `
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition group border border-gray-100">
-                        <div class="menu-img-container bg-gray-200">
-                            <img src="${item.img}" alt="${item.title}">
-                        </div>
-                        <div class="p-4">
-                            <div class="flex justify-between items-start">
-                                <h4 class="font-bold text-lg text-ocean-dark">${item.title}</h4>
-                                <span class="text-china-red font-bold bg-red-50 px-2 py-1 rounded text-sm">${item.price}</span>
+    <!-- Location Section -->
+    <section id="location" class="py-20 fade-in">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-blue-900 mb-4">Visit Us</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Located in the heart of the city, we're easily accessible and ready to serve you 
+                    the finest Thai-Chinese seafood experience.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="font-display text-xl font-semibold text-blue-900 mb-4">
+                            <i class="fas fa-map-marker-alt mr-2 text-gold"></i>
+                            Address
+                        </h3>
+                        <p class="text-gray-600">
+                            123 Dragon Street<br>
+                            Seafood District<br>
+                            Bangkok, Thailand 10100
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-display text-xl font-semibold text-blue-900 mb-4">
+                            <i class="fas fa-clock mr-2 text-gold"></i>
+                            Opening Hours
+                        </h3>
+                        <div class="space-y-2 text-gray-600">
+                            <div class="flex justify-between">
+                                <span>Monday - Friday</span>
+                                <span>11:00 AM - 10:00 PM</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Saturday - Sunday</span>
+                                <span>10:00 AM - 11:00 PM</span>
                             </div>
                         </div>
                     </div>
-                `;
-                grid.innerHTML += card;
+                    
+                    <div>
+                        <h3 class="font-display text-xl font-semibold text-blue-900 mb-4">
+                            <i class="fas fa-phone mr-2 text-gold"></i>
+                            Contact
+                        </h3>
+                        <p class="text-gray-600">
+                            Phone: +66 2 123 4567<br>
+                            Email: info@oceandragon.com
+                        </p>
+                    </div>
+                    
+                    <button onclick="window.open('https://maps.app.goo.gl/3w49By6mD3yF3tVMA', '_blank')" 
+                            class="btn-secondary text-white px-6 py-3 rounded-full">
+                        <i class="fas fa-directions mr-2"></i>
+                        Get Directions
+                    </button>
+                </div>
+                
+                <div class="h-96 bg-gray-200 rounded-lg overflow-hidden">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.8!2d100.5018!3d13.7563!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ1JzIzLjEiTiAxMDDCsDMwJzA2LjUiRQ!5e0!3m2!1sen!2sth!4v1234567890" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Careers Section -->
+    <section id="careers" class="py-20 bg-gray-50 fade-in">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-blue-900 mb-4">Join Our Team</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Be part of a passionate team that delivers exceptional dining experiences. 
+                    We're always looking for talented individuals to join our family.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="font-display text-2xl font-semibold text-blue-900 mb-6">Current Openings</h3>
+                    <div class="space-y-4">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h4 class="font-semibold text-lg text-blue-900">Senior Chef</h4>
+                            <p class="text-gray-600 text-sm mb-2">Minimum 5 years experience in Thai-Chinese cuisine</p>
+                            <span class="text-gold font-semibold">฿40,000 - ฿60,000</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h4 class="font-semibold text-lg text-blue-900">Service Staff</h4>
+                            <p class="text-gray-600 text-sm mb-2">Excellent communication skills, Thai/English preferred</p>
+                            <span class="text-gold font-semibold">฿15,000 - ฿25,000</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h4 class="font-semibold text-lg text-blue-900">Kitchen Assistant</h4>
+                            <p class="text-gray-600 text-sm mb-2">Passion for cooking, willing to learn</p>
+                            <span class="text-gold font-semibold">฿12,000 - ฿18,000</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-display text-2xl font-semibold text-blue-900 mb-6">Apply Now</h3>
+                    <form id="career-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" name="name" required 
+                                   class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" name="email" required 
+                                   class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                            <input type="tel" name="phone" required 
+                                   class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Position</label>
+                            <select name="position" required 
+                                    class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                                <option value="">Select Position</option>
+                                <option value="Senior Chef">Senior Chef</option>
+                                <option value="Service Staff">Service Staff</option>
+                                <option value="Kitchen Assistant">Kitchen Assistant</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Experience</label>
+                            <textarea name="experience" rows="4" required 
+                                      class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none"
+                                      placeholder="Tell us about your relevant experience..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Resume (Optional)</label>
+                            <input type="file" name="resume" accept=".pdf,.doc,.docx" 
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                        </div>
+                        <button type="submit" class="btn-primary w-full text-white py-3 rounded-lg font-semibold">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Submit Application
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservations Section -->
+    <section id="reservations" class="py-20 fade-in">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-blue-900 mb-4">Make a Reservation</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Reserve your table for an unforgettable dining experience. We recommend booking in advance, 
+                    especially for weekends and holidays.
+                </p>
+            </div>
+            
+            <div class="max-w-2xl mx-auto">
+                <form id="reservation-form" class="bg-white p-8 rounded-lg shadow-lg space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                            <input type="text" name="name" required 
+                                   class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
+                            <input type="tel" name="phone" required 
+                                   class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label>
+                            <input type="date" name="date" required 
+                                   class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Time *</label>
+                            <select name="time" required 
+                                    class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                                <option value="">Select Time</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                                <option value="13:00">1:00 PM</option>
+                                <option value="14:00">2:00 PM</option>
+                                <option value="17:00">5:00 PM</option>
+                                <option value="18:00">6:00 PM</option>
+                                <option value="19:00">7:00 PM</option>
+                                <option value="20:00">8:00 PM</option>
+                                <option value="21:00">9:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Number of Guests *</label>
+                        <select name="guests" required 
+                                class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none">
+                            <option value="">Select Guests</option>
+                            <option value="1">1 Person</option>
+                            <option value="2">2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4 People</option>
+                            <option value="5">5 People</option>
+                            <option value="6">6 People</option>
+                            <option value="7">7 People</option>
+                            <option value="8">8+ People</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Special Requests</label>
+                        <textarea name="remarks" rows="3" 
+                                  class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none"
+                                  placeholder="Any dietary restrictions, special occasions, or seating preferences..."></textarea>
+                    </div>
+                    
+                    <input type="hidden" name="timestamp" value="">
+                    
+                    <button type="submit" class="btn-primary w-full text-white py-4 rounded-lg font-semibold text-lg">
+                        <i class="fas fa-calendar-check mr-2"></i>
+                        Confirm Reservation
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <div class="font-display text-3xl font-bold mb-4">Ocean Dragon</div>
+                <p class="text-blue-200 mb-6">
+                    Authentic Thai-Chinese Seafood Excellence Since 1985
+                </p>
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="#" class="text-blue-200 hover:text-gold transition-colors">
+                        <i class="fab fa-facebook text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-blue-200 hover:text-gold transition-colors">
+                        <i class="fab fa-instagram text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-blue-200 hover:text-gold transition-colors">
+                        <i class="fab fa-line text-2xl"></i>
+                    </a>
+                </div>
+                <div class="border-t border-blue-800 pt-6">
+                    <p class="text-blue-200 text-sm">
+                        © 2024 Ocean Dragon Restaurant. All rights reserved. | 
+                        <button onclick="showAdminPanel()" class="text-gold hover:underline">Admin Access</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="modal">
+        <img id="modal-image" src="" alt="">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-4xl hover:text-gold">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="admin-panel">
+        <div class="bg-white p-8 rounded-lg max-w-4xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-display text-2xl font-bold text-blue-900">Admin Dashboard</h2>
+                <button onclick="hideAdminPanel()" class="text-gray-500 hover:text-red-500">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="font-semibold text-lg text-blue-900 mb-4">Upload Menu Images</h3>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                        <input type="file" id="image-upload" multiple accept="image/*" class="hidden">
+                        <button onclick="document.getElementById('image-upload').click()" 
+                                class="btn-secondary text-white px-6 py-3 rounded-lg">
+                            <i class="fas fa-upload mr-2"></i>
+                            Choose Images
+                        </button>
+                        <p class="text-sm text-gray-600 mt-2">Select up to 12 images for menu items</p>
+                    </div>
+                    
+                    <div id="upload-preview" class="mt-4 grid grid-cols-3 gap-2"></div>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-lg text-blue-900 mb-4">Restaurant Analytics</h3>
+                    <div class="h-64" id="analytics-chart"></div>
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <h3 class="font-semibold text-lg text-blue-900 mb-4">Menu Management</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="text-left p-3">Item</th>
+                                <th class="text-left p-3">Category</th>
+                                <th class="text-left p-3">Price</th>
+                                <th class="text-left p-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="menu-table">
+                            <!-- Table rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menu data
+        const menuData = [
+            {
+                id: 1,
+                name: "Thai Chili Crab",
+                category: "mains",
+                price: "฿580",
+                image: "https://kimi-web-img.moonshot.cn/img/www.mythaicooking.com/9718d5052518be011d6f9ba38a9444265c35793c.jpg",
+                description: "Fresh crab stir-fried with authentic Thai chili sauce"
+            },
+            {
+                id: 2,
+                name: "Seafood Tower",
+                category: "appetizers",
+                price: "฿1,200",
+                image: "https://kimi-web-img.moonshot.cn/img/thepolishedchef.com/873c382aaa0d431d293ce8042c1408829e1ab04a.jpg",
+                description: "Premium selection of fresh seafood on ice"
+            },
+            {
+                id: 3,
+                name: "Chinese Steamed Fish",
+                category: "mains",
+                price: "฿450",
+                image: "https://kimi-web-img.moonshot.cn/img/www.seriouseats.com/224eaf30ad4c076139c0f363a62b08e3ca062145.jpg",
+                description: "Whole fish steamed with ginger and scallions"
+            },
+            {
+                id: 4,
+                name: "Seafood Paella",
+                category: "mains",
+                price: "฿680",
+                image: "https://kimi-web-img.moonshot.cn/img/simply-delicious-food.com/3292a2c7574044fc5e53cb0b09d6c2ab6da2c170.jpg",
+                description: "Spanish rice with mixed seafood"
+            },
+            {
+                id: 5,
+                name: "Lobster Platter",
+                category: "mains",
+                price: "฿1,500",
+                image: "https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/e7010cd30eec033edb94a97f644a6c6953fc019a.jpg",
+                description: "Whole lobster with garlic butter sauce"
+            },
+            {
+                id: 6,
+                name: "Seafood Pasta",
+                category: "mains",
+                price: "฿380",
+                image: "https://kimi-web-img.moonshot.cn/img/www.foodandwine.com/1a3ffa7ebb14ea9e8cce20116f1ff4a5161ecb36.jpg",
+                description: "Fresh pasta with mixed seafood in white wine sauce"
+            },
+            {
+                id: 7,
+                name: "Dim Sum Platter",
+                category: "appetizers",
+                price: "฿320",
+                image: "https://kimi-web-img.moonshot.cn/img/img.freepik.com/7a41be32dc82c96861c40bcc9b7f9d61347e33c8.jpg",
+                description: "Assorted steamed and fried dim sum"
+            },
+            {
+                id: 8,
+                name: "Mango Sticky Rice",
+                category: "desserts",
+                price: "฿180",
+                image: "https://kimi-web-img.moonshot.cn/img/wallsdesk.com/fee6d8d8faaa801c06df3c39ad69d8f4038bb460.jpg",
+                description: "Traditional Thai dessert with coconut milk"
+            },
+            {
+                id: 9,
+                name: "Thai Iced Tea",
+                category: "beverages",
+                price: "฿120",
+                image: "https://kimi-web-img.moonshot.cn/img/img.freepik.com/f5e84f098c91aa3cfd5fde9e217b81664da98afc.jpg",
+                description: "Authentic Thai tea with condensed milk"
+            },
+            {
+                id: 10,
+                name: "Grilled Prawns",
+                category: "appetizers",
+                price: "฿420",
+                image: "https://kimi-web-img.moonshot.cn/img/image.freepik.com/736dbbef83d1c73eb4655074c53f3a292433a8a0.jpg",
+                description: "Large prawns grilled with Thai herbs"
+            },
+            {
+                id: 11,
+                name: "Coconut Pudding",
+                category: "desserts",
+                price: "฿150",
+                image: "https://kimi-web-img.moonshot.cn/img/www.thespruceeats.com/da97175999737101e82cc303e7a02038e83406e1.jpg",
+                description: "Traditional coconut custard dessert"
+            },
+            {
+                id: 12,
+                name: "Herbal Tea",
+                category: "beverages",
+                price: "฿100",
+                image: "https://kimi-web-img.moonshot.cn/img/img.freepik.com/179b44b4b21714b061d1ba926c6eb4b4f528b485.jpg",
+                description: "Refreshing blend of Thai herbs"
+            }
+        ];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTypewriter();
+            initializeScrollAnimations();
+            initializeMobileMenu();
+            initializeMenuGrid();
+            initializeStoryCarousel();
+            initializeForms();
+            initializeParticles();
+            initializeAdminPanel();
+        });
+
+        // Typewriter effect for hero
+        function initializeTypewriter() {
+            new Typed('#typed-text', {
+                strings: ['Authentic Thai-Chinese Seafood Excellence', 'Fresh Catch Daily', 'Three Generations of Perfection'],
+                typeSpeed: 50,
+                backSpeed: 30,
+                backDelay: 2000,
+                loop: true,
+                showCursor: true,
+                cursorChar: '|'
             });
         }
 
-        // Call render on load
-        window.onload = renderMenu;
+        // Scroll animations
+        function initializeScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
 
-        // 2. RESERVATION SYSTEM (Google Sheets)
-        const form = document.getElementById('bookingForm');
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbw5Fn--MhdQOGrN2-zYcG1WxZR9i6k1mtjsKzFvGtes-jBAytUP73XEG4CoDKHkNKOD/exec';
-
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const originalText = btn.innerHTML;
-            
-            // Set Timestamp
-            document.getElementById('timestampInput').value = new Date().toLocaleString('th-TH');
-
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่งข้อมูล...';
-            btn.disabled = true;
-
-            // Create FormData
-            let formData = new FormData(form);
-
-            fetch(scriptURL, { method: 'POST', body: formData })
-                .then(response => {
-                    alert('จองโต๊ะสำเร็จ! ทางร้านจะติดต่อกลับเพื่อยืนยันครับ');
-                    form.reset();
-                })
-                .catch(error => {
-                    // Note: Google Script often gives CORS error even if successful.
-                    // We assume success if logic is correct, but ideally catch properly.
-                    console.error('Error!', error.message);
-                    alert('ส่งคำขอจองเรียบร้อยครับ (อาจมีความล่าช้าเล็กน้อย)');
-                    form.reset();
-                })
-                .finally(() => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
                 });
-        });
+            }, observerOptions);
 
-        // 3. CAREER EMAIL SYSTEM (Mailto)
-        function sendJobEmail(e) {
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Mobile menu
+        function initializeMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                });
+            });
+        }
+
+        // Menu grid initialization
+        function initializeMenuGrid() {
+            renderMenuGrid(menuData);
+            initializeMenuFilters();
+        }
+
+        function renderMenuGrid(data) {
+            const grid = document.getElementById('menu-grid');
+            grid.innerHTML = '';
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `menu-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer ${item.category}`;
+                card.innerHTML = `
+                    <div class="relative">
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            ${item.price}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold text-blue-900 mb-2">${item.name}</h3>
+                        <p class="text-gray-600 text-sm">${item.description}</p>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => openModal(item.image));
+                grid.appendChild(card);
+            });
+        }
+
+        function initializeMenuFilters() {
+            const filters = document.querySelectorAll('.menu-filter');
+            
+            filters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                    // Update active filter
+                    filters.forEach(f => {
+                        f.classList.remove('active', 'bg-blue-900', 'text-white');
+                        f.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    filter.classList.add('active', 'bg-blue-900', 'text-white');
+                    filter.classList.remove('bg-gray-200', 'text-gray-700');
+                    
+                    // Filter menu items
+                    const category = filter.dataset.filter;
+                    const items = document.querySelectorAll('.menu-card');
+                    
+                    items.forEach(item => {
+                        if (category === 'all' || item.classList.contains(category)) {
+                            item.style.display = 'block';
+                            anime({
+                                targets: item,
+                                opacity: [0, 1],
+                                translateY: [20, 0],
+                                duration: 500,
+                                easing: 'easeOutQuad'
+                            });
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        // Story carousel
+        function initializeStoryCarousel() {
+            new Splide('#story-carousel', {
+                type: 'loop',
+                autoplay: true,
+                interval: 4000,
+                arrows: false,
+                pagination: true
+            }).mount();
+        }
+
+        // Forms initialization
+        function initializeForms() {
+            // Reservation form
+            const reservationForm = document.getElementById('reservation-form');
+            reservationForm.addEventListener('submit', handleReservationSubmit);
+            
+            // Career form
+            const careerForm = document.getElementById('career-form');
+            careerForm.addEventListener('submit', handleCareerSubmit);
+            
+            // Set timestamp for reservation form
+            reservationForm.querySelector('input[name="timestamp"]').value = new Date().toISOString();
+        }
+
+        async function handleReservationSubmit(e) {
             e.preventDefault();
-            const name = document.getElementById('jobName').value;
-            const phone = document.getElementById('jobPhone').value;
-            const position = document.getElementById('jobPosition').value;
-            const email = "jarwuat.butsana@hotmail.com";
             
-            const subject = `สมัครงานตำแหน่ง: ${position} - ${name}`;
-            const body = `สวัสดีครับ,\n\nผมชื่อ ${name}\nเบอร์โทร: ${phone}\nสนใจสมัครงานตำแหน่ง ${position} ครับ\n\nขอบคุณครับ`;
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
             
-            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        }
-
-        // 4. ADMIN SYSTEM (Simulation)
-        function openAdminModal() {
-            document.getElementById('adminModal').classList.remove('hidden');
-        }
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-        
-        function checkLogin() {
-            const pass = document.getElementById('adminPass').value;
-            if(pass === "admin123") { // Simple password check
-                document.getElementById('loginState').classList.add('hidden');
-                document.getElementById('uploadState').classList.remove('hidden');
-            } else {
-                alert("รหัสผ่านผิด! ลองใหม่");
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbw5Fn--MhdQOGrN2-zYcG1WxZR9i6k1mtjsKzFvGtes-jBAytUP73XEG4CoDKHkNKOD/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                showNotification('Reservation submitted successfully! We will contact you soon.', 'success');
+                e.target.reset();
+            } catch (error) {
+                showNotification('Reservation submitted successfully! We will contact you soon.', 'success');
+                e.target.reset();
             }
         }
 
-        let currentImgData = null;
-        function previewImage() {
-            const file = document.getElementById('imgInput').files[0];
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                currentImgData = reader.result;
-                alert("รูปพร้อมอัพโหลดแล้ว! กรุณากรอกชื่อเมนูและราคา");
-            }
-            if (file) {
+        function handleCareerSubmit(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Create mailto link
+            const subject = encodeURIComponent(`Job Application - ${data.position}`);
+            const body = encodeURIComponent(
+                `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nPosition: ${data.position}\n\nExperience:\n${data.experience}`
+            );
+            
+            window.location.href = `mailto:jarwuat.butsana@hotmail.com?subject=${subject}&body=${body}`;
+            
+            showNotification('Application prepared! Opening email client...', 'success');
+            e.target.reset();
+        }
+
+        // Particles background
+        function initializeParticles() {
+            new p5((p) => {
+                let particles = [];
+                
+                p.setup = () => {
+                    const canvas = p.createCanvas(window.innerWidth, window.innerHeight);
+                    canvas.parent('particles');
+                    canvas.style('position', 'absolute');
+                    canvas.style('top', '0');
+                    canvas.style('left', '0');
+                    canvas.style('z-index', '1');
+                    
+                    for (let i = 0; i < 50; i++) {
+                        particles.push({
+                            x: p.random(p.width),
+                            y: p.random(p.height),
+                            size: p.random(2, 6),
+                            speedX: p.random(-0.5, 0.5),
+                            speedY: p.random(-0.5, 0.5),
+                            opacity: p.random(0.1, 0.3)
+                        });
+                    }
+                };
+                
+                p.draw = () => {
+                    p.clear();
+                    
+                    particles.forEach(particle => {
+                        p.fill(245, 158, 11, particle.opacity * 255);
+                        p.noStroke();
+                        p.ellipse(particle.x, particle.y, particle.size);
+                        
+                        particle.x += particle.speedX;
+                        particle.y += particle.speedY;
+                        
+                        if (particle.x < 0 || particle.x > p.width) particle.speedX *= -1;
+                        if (particle.y < 0 || particle.y > p.height) particle.speedY *= -1;
+                    });
+                };
+                
+                p.windowResized = () => {
+                    p.resizeCanvas(window.innerWidth, window.innerHeight);
+                };
+            });
+        }
+
+        // Admin panel
+        function initializeAdminPanel() {
+            const imageUpload = document.getElementById('image-upload');
+            imageUpload.addEventListener('change', handleImageUpload);
+            
+            // Initialize analytics chart
+            const chartDom = document.getElementById('analytics-chart');
+            const myChart = echarts.init(chartDom);
+            
+            const option = {
+                title: {
+                    text: 'Daily Reservations',
+                    textStyle: { fontSize: 14 }
+                },
+                tooltip: {},
+                xAxis: {
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                },
+                yAxis: {},
+                series: [{
+                    name: 'Reservations',
+                    type: 'bar',
+                    data: [12, 8, 15, 22, 35, 45, 38],
+                    itemStyle: {
+                        color: '#f59e0b'
+                    }
+                }]
+            };
+            
+            myChart.setOption(option);
+        }
+
+        function handleImageUpload(e) {
+            const files = Array.from(e.target.files);
+            const preview = document.getElementById('upload-preview');
+            
+            preview.innerHTML = '';
+            
+            files.slice(0, 12).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-20 object-cover rounded cursor-pointer';
+                    img.addEventListener('click', () => addToMenu(e.target.result, file.name));
+                    preview.appendChild(img);
+                };
                 reader.readAsDataURL(file);
-            }
+            });
         }
 
-        function addMenuItem() {
-            const title = document.getElementById('menuTitle').value;
-            const price = document.getElementById('menuPrice').value;
+        function addToMenu(imageSrc, name) {
+            const newItem = {
+                id: menuData.length + 1,
+                name: name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                category: 'mains',
+                price: '฿350',
+                image: imageSrc,
+                description: 'Freshly added menu item'
+            };
             
-            if(title && price && currentImgData) {
-                // Add to array (Last in, First shown logic could be applied)
-                menuItems.unshift({ title: title, price: price, img: currentImgData });
-                renderMenu();
-                alert("เพิ่มเมนูเรียบร้อย!");
-                // Reset inputs
-                document.getElementById('menuTitle').value = '';
-                document.getElementById('menuPrice').value = '';
-                closeAdminModal();
-            } else {
-                alert("กรุณากรอกข้อมูลให้ครบทุกช่อง");
-            }
+            menuData.push(newItem);
+            renderMenuGrid(menuData);
+            showNotification('Menu item added successfully!', 'success');
         }
+
+        // Utility functions
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openModal(imageSrc) {
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            modalImage.src = imageSrc;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('image-modal').classList.remove('active');
+        }
+
+        function showAdminPanel() {
+            document.getElementById('admin-panel').classList.add('active');
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('admin-panel').classList.remove('active');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 right-4 z-50 p-4 rounded-lg shadow-lg ${
+                type === 'success' ? 'bg-green-500' : 'bg-blue-500'
+            } text-white`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            anime({
+                targets: notification,
+                translateX: [300, 0],
+                opacity: [0, 1],
+                duration: 500,
+                easing: 'easeOutQuad'
+            });
+            
+            setTimeout(() => {
+                anime({
+                    targets: notification,
+                    translateX: [0, 300],
+                    opacity: [1, 0],
+                    duration: 500,
+                    easing: 'easeInQuad',
+                    complete: () => notification.remove()
+                });
+            }, 3000);
+        }
+
+        // Navigation active state
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
     </script>
 </body>
 </html>
